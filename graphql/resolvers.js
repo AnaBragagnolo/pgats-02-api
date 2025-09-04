@@ -1,6 +1,7 @@
 const userService = require('../service/userService');
 const transferService = require('../service/transferService');
 const jwt = require('jsonwebtoken');
+const { ApolloError } = require('apollo-server-express');
 const SECRET = process.env.JWT_SECRET || 'secretdemo';
 
 module.exports = {
@@ -21,8 +22,13 @@ module.exports = {
       return { token, user };
     },
     createTransfer: (parent, { from, to, value }, context) => {
-      if (!context.user) throw new Error('Autenticação obrigatória');
-      return transferService.transfer({ from, to, value });
+      if (!context.user) throw new ApolloError('Autenticação obrigatória');
+      try {
+        return transferService.transfer({ from, to, value });
+      } catch (err) {
+        throw new ApolloError(err.message);
+      }
     },
+
   },
 };
