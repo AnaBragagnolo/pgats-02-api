@@ -27,7 +27,7 @@ jobs:
       run: npm run test-rest-controller
 
     - name: Subir API REST
-      run: npm run start-rest &
+      run: PORT=3000 npm run start-rest &> rest.log &
 
     - name: Esperar API REST
       run: npx wait-on http://localhost:3000
@@ -36,7 +36,7 @@ jobs:
       run: npm run test-rest-external
 
     - name: Subir API GraphQL
-      run: npm run start-graphql &
+      run: PORT=4000 npm run start-graphql &> graphql.log &
 
     - name: Esperar API GraphQL
       run: npx wait-on http://localhost:4000/graphql
