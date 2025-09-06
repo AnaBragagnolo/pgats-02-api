@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -26,20 +25,22 @@ jobs:
     - name: Rodar os testes de API via Controller
       run: npm run test-rest-controller
 
-    - name: Subir API REST
-      run: PORT=3000 npm run start-rest &> rest.log &
+    - name: Subir a API Rest 
+      run: npm run start-rest &
 
-    - name: Esperar API REST
-      run: npx wait-on http://localhost:3000
+    - name: Subir a API GraphQL 
+      run: npm run start-graphql &
 
-    - name: Rodar testes REST externos
+    - name: Esperar as APIs estarem Funcionando
+      run: sleep 8
+
+    - name: Criar .env
+      run: |
+        echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
+        echo "BASE_URL_GRAPHQL=${{ secrets.BASE_URL_GRAPHQL }}" >> .env
+
+    - name: Rodar os testes External de API Rest via HTTP
       run: npm run test-rest-external
 
-    - name: Subir API GraphQL
-      run: PORT=4000 npm run start-graphql &> graphql.log &
-
-    - name: Esperar API GraphQL
-      run: npx wait-on http://localhost:4000/graphql
-      
-    - name: Rodar testes GraphQL externos
+    - name: Rodar os testes External de API GraphQL via HTTP
       run: npm run test-graphql-external
