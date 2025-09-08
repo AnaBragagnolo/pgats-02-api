@@ -1,6 +1,7 @@
 // Bibliotecas
 const request = require('supertest');
 const { expect } = require('chai');
+require('dotenv').config();
 
 // Testes
 describe('Transfer', () => {
@@ -8,7 +9,7 @@ describe('Transfer', () => {
         let token;
         beforeEach(async () => {
             const loginUser = require('../fixture/requisicoes/login/loginUser.json');
-            const respostaLogin = await request('http://localhost:4000')
+            const respostaLogin = await request(process.env.BASE_URL_GRAPHQL)
                 .post('/graphql')
                 .send({
                     query: `
@@ -23,7 +24,7 @@ describe('Transfer', () => {
         });
 
         it('Deve retornar erro: "Saldo insuficiente"', async () => {
-            const resposta = await request('http://localhost:4000')
+            const resposta = await request(process.env.BASE_URL_GRAPHQL)
                 .post('/graphql')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
@@ -50,7 +51,7 @@ describe('Transfer', () => {
 
         it('Validar que é possivel transferir dinheiro entre duas contas', async () => {
             const createTransfer = require('../fixture/requisicoes/transferencia/createTransfer.json');
-            const resposta = await request('http://localhost:4000')
+            const resposta = await request(process.env.BASE_URL_GRAPHQL)
                 .post('/graphql')
                 .set('Authorization', `Bearer ${token}`)
                 .send(createTransfer);
@@ -62,7 +63,7 @@ describe('Transfer', () => {
         });
 
         it('Deve retornar erro quando o token não é informado', async () => {
-            const resposta = await request('http://localhost:4000')
+            const resposta = await request(process.env.BASE_URL_GRAPHQL)
                 .post('/graphql')
                 .send({
                     query: `

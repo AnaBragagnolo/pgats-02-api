@@ -20,6 +20,10 @@ Esta API permite o registro, login, consulta de usuários e transferências de v
    npm install express swagger-ui-express bcryptjs
    ```
 
+## Configuração
+
+Antes de seguir, crie um serviço .env na pasta raiz contendo as propriedades BASE_URL_REST E BASE_URL_GRAPHQL, com a desses serviços
+
 ## Como rodar
 
 - Para iniciar o servidor:
